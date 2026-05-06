@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask About Jesus — Faith, Hope & Answers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { inter: ['Inter','sans-serif'], dm: ['DM Sans','sans-serif'] } } } }
+    </script>
+    <style>
+        body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0a0a}::-webkit-scrollbar-thumb{background:#262626;border-radius:3px}
+        .bg-grid{background-size:40px 40px;background-image:linear-gradient(to right,rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.03) 1px,transparent 1px);mask-image:linear-gradient(to bottom,black 40%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,black 40%,transparent 100%)}
+        .glow-blob{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(16,185,129,.15) 0%,transparent 70%);border-radius:50%;top:-200px;left:50%;transform:translateX(-50%);filter:blur(60px);z-index:0;pointer-events:none}
+        .glow-blob-warm{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(251,191,36,.1) 0%,transparent 70%);border-radius:50%;top:100px;right:-100px;filter:blur(60px);z-index:0;pointer-events:none}
+        .hero-title-gradient{background:linear-gradient(to bottom,#34d399 0%,#047857 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .card-hover{transition:border-color .3s,box-shadow .3s,transform .3s}.card-hover:hover{border-color:rgba(16,185,129,.3);box-shadow:0 0 30px -5px rgba(16,185,129,.1);transform:translateY(-2px)}
+        .btn-primary{transition:transform 150ms,box-shadow 150ms}.btn-primary:hover{transform:scale(1.05)}.btn-primary:active{transform:scale(.95)}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.float-anim{animation:float 6s ease-in-out infinite}
+        @keyframes scaleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}.scale-in{animation:scaleIn .5s cubic-bezier(.16,1,.3,1) forwards}
+        @keyframes checkDraw{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}.check-animate{stroke-dasharray:24;stroke-dashoffset:24;animation:checkDraw .6s ease .3s forwards}
+        @keyframes spin{to{transform:rotate(360deg)}}.spinner{animation:spin 1s linear infinite}
+        .cross-glow{text-shadow:0 0 40px rgba(16,185,129,.3),0 0 80px rgba(16,185,129,.1)}
+        .verse-card{transition:all .5s cubic-bezier(.16,1,.3,1)}
+        .question-input:focus{border-color:rgba(16,185,129,.5);box-shadow:0 0 0 3px rgba(16,185,129,.1)}
+        .toast{animation:slideIn .4s ease,fadeOut .4s ease 2.6s forwards}
+        @keyframes slideIn{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+        @keyframes fadeOut{from{opacity:1}to{opacity:0}}
+        .nav-blur{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+        @keyframes pulse-ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.8);opacity:0}}.pulse-ring{animation:pulse-ring 2s ease-out infinite}
+        .lang-dd{display:none}.lang-dd.active{display:block}
+        .faq-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.16,1,.3,1),opacity .3s;opacity:0}
+        .faq-body.open{opacity:1}
+        .faq-icon{transition:transform .3s ease}.faq-icon.rot{transform:rotate(180deg)}
+        .sola-num{font-size:4rem;font-weight:200;line-height:1;background:linear-gradient(to bottom,rgba(16,185,129,.25),transparent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:absolute;top:-8px;right:8px;pointer-events:none}
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+<div id="toast-box" class="fixed top-20 right-4 z-[100] flex flex-col gap-2"></div>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-neutral-950/80 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center"><span class="iconify text-emerald-400" data-icon="lucide:cross" data-width="16"></span></div><span class="font-dm text-lg font-medium tracking-tighter">AskJesus</span></a>
+        <div class="hidden lg:flex items-center gap-5">
+            <a href="#ask" class="text-sm text-neutral-400 hover:text-white transition-colors" data-t="nav_ask">Ask a Question</a>
+            <a href="#faq" class="text-sm text-neutral-400 hover:text-white transition-colors" data-t="nav_faq">FAQ</a>
+            <a href="#who-is-jesus" class="text-sm text-neutral-400 hover:text-white transition-colors" data-t="nav_who">Who is Jesus?</a>
+            <a href="#doctrines" class="text-sm text-neutral-400 hover:text-white transition-colors" data-t="nav_doc">Core Doctrines</a>
+            <a href="#resources" class="text-sm text-neutral-400 hover:text-white transition-colors" data-t="nav_res">Resources</a>
+            <div class="relative ml-1">
+                <button id="lb" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-sm text-neutral-300"><span id="lf">🇬🇧</span><span id="ll" class="hidden sm:inline text-xs">EN</span><span class="iconify text-neutral-500" data-icon="lucide:chevron-down" data-width="12"></span></button>
+                <div id="ld" class="lang-dd absolute right-0 top-full mt-2 w-44 bg-neutral-900 border border-white/10 rounded-xl overflow-hidden shadow-xl shadow-black/30 z-50">
+                    <button onclick="setLang('en')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-white/5 text-left"><span>🇬🇧</span><span>English</span><span class="iconify ml-auto text-emerald-400 ck" data-icon="lucide:check" data-width="14" data-l="en"></span></button>
+                    <button onclick="setLang('sq')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-white/5 text-left"><span>🇦🇱</span><span>Shqip</span><span class="iconify ml-auto text-emerald-400 ck hidden" data-icon="lucide:check" data-width="14" data-l="sq"></span></button>
+                    <button onclick="setLang('no')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-white/5 text-left"><span>🇳🇴</span><span>Norsk</span><span class="iconify ml-auto text-emerald-400 ck hidden" data-icon="lucide:check" data-width="14" data-l="no"></span></button>
+                </div>
+            </div>
+            <a href="#ask" class="btn-primary bg-white text-black text-sm font-medium px-5 py-2 rounded-full" data-t="nav_cta">Ask Now</a>
+        </div>
+        <div class="flex lg:hidden items-center gap-2">
+            <div class="relative">
+                <button id="lbm" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-white/10 bg-white/5 text-neutral-300"><span id="lfm">🇬🇧</span><span class="iconify text-neutral-500" data-icon="lucide:chevron-down" data-width="12"></span></button>
+                <div id="ldm" class="lang-dd absolute right-0 top-full mt-2 w-40 bg-neutral-900 border border-white/10 rounded-xl overflow-hidden shadow-xl shadow-black/30 z-50">
+                    <button onclick="setLang('en')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-white/5 text-left"><span>🇬🇧</span><span>English</span><span class="iconify ml-auto text-emerald-400 ckm" data-icon="lucide:check" data-width="14" data-l="en"></span></button>
+                    <button onclick="setLang('sq')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-white/5 text-left"><span>🇦🇱</span><span>Shqip</span><span class="iconify ml-auto text-emerald-400 ckm hidden" data-icon="lucide:check" data-width="14" data-l="sq"></span></button>
+                    <button onclick="setLang('no')" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-white/5 text-left"><span>🇳🇴</span><span>Norsk</span><span class="iconify ml-auto text-emerald-400 ckm hidden" data-icon="lucide:check" data-width="14" data-l="no"></span></button>
+                </div>
+            </div>
+            <button id="mb" class="p-2 text-neutral-400 hover:text-white"><span class="iconify" data-icon="lucide:menu" data-width="20"></span></button>
+        </div>
+    </div>
+    <div id="mm" class="hidden lg:hidden border-t border-white/5 bg-neutral-950/95 nav-blur"><div class="px-6 py-4 flex flex-col gap-3">
+        <a href="#ask" class="text-sm text-neutral-400 hover:text-white py-2" data-t="nav_ask">Ask a Question</a>
+        <a href="#faq" class="text-sm text-neutral-400 hover:text-white py-2" data-t="nav_faq">FAQ</a>
+        <a href="#who-is-jesus" class="text-sm text-neutral-400 hover:text-white py-2" data-t="nav_who">Who is Jesus?</a>
+        <a href="#doctrines" class="text-sm text-neutral-400 hover:text-white py-2" data-t="nav_doc">Core Doctrines</a>
+        <a href="#resources" class="text-sm text-neutral-400 hover:text-white py-2" data-t="nav_res">Resources</a>
+    </div></div>
+</nav>
+
+<!-- HERO -->
+<section class="relative pt-32 pb-16 text-center overflow-hidden">
+    <div class="bg-grid absolute inset-0 z-0"></div><div class="glow-blob"></div><div class="glow-blob-warm"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 mb-8"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span class="text-xs font-medium text-neutral-400" data-t="hero_badge">Find answers in faith</span></div>
+        <div class="float-anim mb-8"><div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 cross-glow"><span class="iconify text-emerald-400" data-icon="lucide:cross" data-width="36"></span></div></div>
+        <h1 class="font-dm font-light text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-none mb-6"><span class="text-white" data-t="hero_t1">Ask About</span><br><span class="hero-title-gradient" data-t="hero_t2">Jesus</span></h1>
+        <p class="text-lg font-light text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-10" data-t="hero_desc">Have questions about faith, Jesus, or the Bible? Find quick answers below, or submit your question for a personal, scripture-based response by email.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#faq" class="btn-primary bg-white text-black text-sm font-medium px-8 py-3 rounded-full inline-flex items-center gap-2"><span class="iconify" data-icon="lucide:search" data-width="16"></span><span data-t="hero_cta1">Browse Answers</span></a>
+            <a href="#ask" class="btn-primary bg-white/5 border border-white/10 text-white text-sm font-medium px-8 py-3 rounded-full inline-flex items-center gap-2 hover:bg-white/10 transition-colors"><span class="iconify" data-icon="lucide:mail" data-width="16"></span><span data-t="hero_cta2">Ask a Question</span></a>
+        </div>
+        <div class="mt-16 grid grid-cols-3 max-w-lg mx-auto gap-8">
+            <div><div class="font-dm text-2xl font-light text-white">66</div><div class="text-xs text-neutral-500 mt-1" data-t="stat_bible">Books of the Bible</div></div>
+            <div><div class="font-dm text-2xl font-light text-white">2,000+</div><div class="text-xs text-neutral-500 mt-1" data-t="stat_years">Years of Faith</div></div>
+            <div><div class="font-dm text-2xl font-light text-white">∞</div><div class="text-xs text-neutral-500 mt-1" data-t="stat_love">God's Love</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ASK FORM -->
+<section id="ask" class="relative py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+            <span class="text-emerald-400 text-xs font-medium tracking-wide uppercase" data-t="ask_label">Your Questions Matter</span>
+            <h2 class="font-dm font-light text-3xl md:text-5xl tracking-tight mt-3 mb-4" data-t="ask_title">Submit Your Question</h2>
+            <p class="text-neutral-400 font-light text-lg max-w-xl mx-auto" data-t="ask_desc">For deeper or personal questions, fill out the form and receive a thoughtful, Bible-based answer by email.</p>
+        </div>
+        <div class="max-w-2xl mx-auto">
+            <form id="qf" action="https://formsubmit.co/mkycyku7@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="New Faith Question - AskJesus"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="table"><input type="hidden" name="_next" id="ru"><input type="text" name="_honey" style="display:none">
+                <div class="space-y-5">
+                    <div><label class="block text-xs font-medium text-neutral-400 mb-2 uppercase tracking-wide"><span data-t="f_name">Your Name</span> <span class="text-neutral-600" data-t="f_opt">(optional)</span></label><div class="relative"><span class="iconify absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" data-icon="lucide:user" data-width="16"></span><input type="text" name="Name" data-p="f_name_ph" placeholder="e.g. John" class="w-full bg-neutral-900/50 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-neutral-600 outline-none focus:border-emerald-500/30 transition-colors"></div></div>
+                    <div><label class="block text-xs font-medium text-neutral-400 mb-2 uppercase tracking-wide"><span data-t="f_email">Your Email</span> <span class="text-emerald-400">*</span></label><div class="relative"><span class="iconify absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" data-icon="lucide:mail" data-width="16"></span><input type="email" name="Email" id="ei" required data-p="f_email_ph" placeholder="your.email@example.com" class="w-full bg-neutral-900/50 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-neutral-600 outline-none focus:border-emerald-500/30 transition-colors"></div></div>
+                    <div><label class="block text-xs font-medium text-neutral-400 mb-2 uppercase tracking-wide"><span data-t="f_q">Your Question</span> <span class="text-emerald-400">*</span></label><div class="relative"><span class="iconify absolute left-4 top-4 text-neutral-500" data-icon="lucide:message-circle" data-width="16"></span><textarea name="Question" id="qi" required data-p="f_q_ph" placeholder="e.g. Who is Jesus? Why did He die on the cross?" class="question-input w-full bg-neutral-900/50 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-neutral-600 outline-none resize-none min-h-[120px] max-h-[300px]" rows="4"></textarea></div></div>
+                    <div class="pt-2"><button type="submit" id="sb" class="btn-primary w-full bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-medium px-8 py-4 rounded-xl flex items-center justify-center gap-3 transition-colors"><span class="iconify" data-icon="lucide:send" data-width="18"></span><span data-t="f_submit">Submit Your Question</span></button></div>
+                </div>
+            </form>
+            <div id="ok" class="hidden"><div class="text-center py-12 scale-in"><div class="relative inline-flex items-center justify-center w-24 h-24 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6"><div class="absolute inset-0 rounded-full border border-emerald-500/10 pulse-ring"></div><svg class="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path class="check-animate" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div><h3 class="font-dm text-2xl font-light mb-3" data-t="ok_t">Question Sent!</h3><p class="text-neutral-400 font-light text-sm max-w-md mx-auto mb-8" data-t="ok_d">Your question has been received. A personal, scripture-based answer will be sent to your email soon.</p><button onclick="rf()" class="btn-primary bg-white/5 border border-white/10 text-white text-sm font-medium px-6 py-2.5 rounded-full inline-flex items-center gap-2 hover:bg-white/10 transition-colors"><span class="iconify" data-icon="lucide:plus" data-width="14"></span><span data-t="ok_a">Ask Another Question</span></button></div></div>
+            <div id="ib" class="mt-10 p-5 rounded-2xl bg-neutral-900/30 border border-white/5"><div class="flex items-start gap-3"><span class="iconify text-emerald-400/60 mt-0.5 shrink-0" data-icon="lucide:info" data-width="16"></span><div class="text-xs text-neutral-500 font-light leading-relaxed space-y-1"><p><strong class="text-neutral-400" data-t="i_hl">How it works:</strong> <span data-t="i_h">Submit your question and receive a Bible-based answer by email.</span></p><p><strong class="text-neutral-400" data-t="i_pl">Privacy:</strong> <span data-t="i_p">Your name and email are kept confidential.</span></p><p><strong class="text-neutral-400" data-t="i_tl">Response time:</strong> <span data-t="i_t">Within 24-48 hours.</span></p></div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ - HARDCODED -->
+<section id="faq" class="relative py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+            <span class="text-emerald-400 text-xs font-medium tracking-wide uppercase" data-t="fq_label">Quick Answers</span>
+            <h2 class="font-dm font-light text-3xl md:text-5xl tracking-tight mt-3 mb-4" data-t="fq_title">Frequently Asked Questions</h2>
+            <p class="text-neutral-400 font-light text-lg max-w-xl mx-auto" data-t="fq_desc">Find answers rooted in Scripture and informed by faithful biblical theology. Click any question to expand.</p>
+        </div>
+        <div class="max-w-3xl mx-auto space-y-3">
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q1">How can I be saved?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>Salvation is entirely by God's grace through faith alone in Christ alone - not by works, rituals, or moral effort (Ephesians 2:8-9). As John MacArthur emphasizes, saving faith is not mere intellectual assent but a wholehearted surrender to Christ as Lord. True salvation involves <strong>repentance</strong> - a turning from sin - and <strong>faith</strong> - a turning to Christ in trust.</p><p class="mt-2">When God regenerates your heart, you are justified before God, adopted into His family, and sealed by the Holy Spirit. This is not something you earn - it is a gift received. Calvin wrote: "We are saved by grace alone, but the grace that saves is never alone - it always produces a transformed life."</p><p class="mt-2 text-emerald-400/80 text-xs italic">"If you confess with your mouth the Lord Jesus and believe in your heart that God has raised Him from the dead, you will be saved." - Romans 10:9</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q2">What does it mean that God is sovereign?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>God's sovereignty means He exercises absolute authority over all creation - from galaxies to the smallest details of your life. As Calvin wrote in the <em>Institutes</em>: "God so governs all events by His providence that nothing happens by chance."</p><p class="mt-2">This is not cold determinism but loving, purposeful rule. As John Piper says: "God is always doing 10,000 things in your life, and you may be aware of three of them." God's sovereignty does not negate human responsibility, but it gives believers profound comfort (Romans 8:28).</p><p class="mt-2 text-emerald-400/80 text-xs italic">"He does according to His will in the army of heaven and among the inhabitants of the earth. No one can restrain His hand." - Daniel 4:35</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q3">Can I lose my salvation?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>No. Those whom God has truly saved, He will keep to the end. This is the doctrine of the <strong>Perseverance of the Saints</strong>. Jesus said: "My sheep hear My voice, and I know them, and they follow Me. And I give them eternal life, and they shall never perish" (John 10:27-28).</p><p class="mt-2">MacArthur teaches that genuine salvation always produces evidence - it is not a prayer without transformation. Calvin wrote that the elect are preserved not by their own power but by God's unbreakable covenant. God who began a good work in you will complete it (Philippians 1:6).</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q4">What is the purpose of my life?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>The chief end of man is to glorify God and enjoy Him forever - the opening of the Westminster Catechism, deeply aligned with Calvin's theology. John Piper frames this as "Christian Hedonism": <strong>God is most glorified in us when we are most satisfied in Him.</strong></p><p class="mt-2">Your purpose is not found in career, relationships, or achievements - it is found in knowing, loving, and worshiping God through Christ. "Whatever you do, do all to the glory of God" (1 Corinthians 10:31).</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q5">Why did Jesus have to die?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>Jesus had to die because God is both perfectly just and perfectly loving. Sin must be punished - God cannot simply overlook it without compromising His justice. Yet God also loves sinners and desires their salvation. The cross is where <strong>justice and mercy meet</strong>.</p><p class="mt-2">This is <strong>penal substitutionary atonement</strong> - the view held by MacArthur, Piper, and Calvin. Jesus bore the wrath of God against sin in the place of His people. "For He made Him who knew no sin to be sin for us, that we might become the righteousness of God in Him" (2 Corinthians 5:21).</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q6">What is predestination?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>Predestination is God's eternal, sovereign choice to save a specific people for Himself - not based on their foreseen merit, but entirely on His grace. "He chose us in Him before the foundation of the world" (Ephesians 1:4).</p><p class="mt-2">As Calvin taught, election is unconditional. This does not make God unfair - as Paul asks in Romans 9, "Who are you to reply against God?" No one deserves salvation, so God's choice to save anyone is pure mercy. Predestination is not a barrier to evangelism but its foundation (2 Thessalonians 2:13-14).</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q7">How do I know the Bible is true?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>The Bible is self-attesting - its authority does not depend on human approval. As MacArthur teaches, Scripture's inerrancy and divine origin are confirmed by its unity (66 books, 40+ authors, 1500 years, one message), prophetic accuracy, historical reliability, and transforming power.</p><p class="mt-2">Calvin called Scripture the "spectacles" through which we see God clearly. Jesus Himself affirmed the Bible's authority: "Scripture cannot be broken" (John 10:35). "All Scripture is given by inspiration of God" (2 Timothy 3:16) - literally "God-breathed."</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q8">What does it mean to be born again?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>Being born again (<strong>regeneration</strong>) is the supernatural work of the Holy Spirit in which He gives a dead sinner new spiritual life. As MacArthur teaches, this is not something you do - it is something done <em>to</em> you.</p><p class="mt-2">Jesus told Nicodemus: "Unless one is born of water and the Spirit, he cannot enter the kingdom of God" (John 3:5). Calvin described regeneration as the Spirit renewing the heart so that a person can truly see, desire, and embrace Christ. The evidence is a transformed life: new desires, new affections, new obedience (2 Corinthians 5:17).</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q9">What is the role of the Holy Spirit?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>The Holy Spirit is God - the third Person of the Trinity - not an impersonal force. He <strong>convicts</strong> the world of sin (John 16:8); <strong>regenerates</strong> dead hearts (Titus 3:5); <strong>indwells</strong> every believer as a seal (Ephesians 1:13-14); <strong>sanctifies</strong> believers producing fruit (Galatians 5:22-23); and <strong>empowers</strong> for service.</p><p class="mt-2">Piper emphasizes that the Spirit's supreme ministry is to glorify Christ. MacArthur teaches that the Spirit equips believers with gifts for building up the body. "He will glorify Me, for He will take of what is Mine and declare it to you" (John 16:14).</p></div></div></div>
+            <div class="bg-neutral-900/30 border border-white/10 rounded-2xl overflow-hidden"><button onclick="tog(this)" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-white/[0.02] transition-colors"><span class="text-sm font-medium text-neutral-200 pr-4" data-t="q10">How should I read the Bible?</span><span class="iconify faq-icon text-neutral-500 shrink-0" data-icon="lucide:chevron-down" data-width="18"></span></button><div class="faq-body px-6"><div class="text-sm text-neutral-400 font-light leading-relaxed pb-6"><p>Read the Bible prayerfully, systematically, and with a desire to know God - not merely to gather information. MacArthur advocates for <strong>expository reading</strong>: letting the text speak for itself, in context, verse by verse.</p><p class="mt-2">Start with the Gospels (John is ideal), then Acts, Romans, and the rest of the New Testament. Calvin counseled reading with humility and dependence on the Holy Spirit for illumination. Piper recommends asking: <em>What does this teach about God? About me? What should I do?</em> "Your word is a lamp to my feet and a light to my path" (Psalm 119:105).</p></div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- WHO IS JESUS -->
+<section id="who-is-jesus" class="relative py-24 border-t border-white/5 overflow-hidden">
+    <div class="glow-blob" style="top:50%;transform:translate(-50%,-50%)"></div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16"><span class="text-emerald-400 text-xs font-medium tracking-wide uppercase" data-t="w_l">The Heart of Faith</span><h2 class="font-dm font-light text-3xl md:text-5xl tracking-tight mt-3 mb-4" data-t="w_t">Who Is Jesus?</h2><p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto" data-t="w_d">Jesus Christ is the central figure of Christianity - fully God and fully human, the Son of God who came to save the world.</p></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:sparkles" data-width="22"></span></div><h3 class="font-dm text-xl font-medium mb-3" data-t="w1t">Son of God</h3><p class="text-sm text-neutral-400 font-light leading-relaxed" data-t="w1d">Jesus is the only begotten Son of God, born of the Virgin Mary. He is the Word made flesh - God who became human to dwell among us.</p><p class="text-xs text-emerald-400/70 mt-4 italic">"In the beginning was the Word, and the Word was with God, and the Word was God." - John 1:1</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:heart" data-width="22"></span></div><h3 class="font-dm text-xl font-medium mb-3" data-t="w2t">Savior of the World</h3><p class="text-sm text-neutral-400 font-light leading-relaxed" data-t="w2d">Jesus died on the cross to pay the penalty for our sins. His sacrifice offers forgiveness, redemption, and eternal life to all who believe.</p><p class="text-xs text-emerald-400/70 mt-4 italic">"For God so loved the world that He gave His only begotten Son." - John 3:16</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:sun" data-width="22"></span></div><h3 class="font-dm text-xl font-medium mb-3" data-t="w3t">Risen Lord</h3><p class="text-sm text-neutral-400 font-light leading-relaxed" data-t="w3d">On the third day, Jesus rose from the dead, conquering death and sin. His resurrection is the foundation of Christian hope and the promise of new life.</p><p class="text-xs text-emerald-400/70 mt-4 italic">"He is not here; for He is risen, as He said." - Matthew 28:6</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- FIVE SOLAS - HARD CODED -->
+<section id="doctrines" class="relative py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16"><span class="text-emerald-400 text-xs font-medium tracking-wide uppercase" data-t="d_l">Foundational Truths</span><h2 class="font-dm font-light text-3xl md:text-5xl tracking-tight mt-3 mb-4" data-t="d_t">The Five Solas</h2><p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto" data-t="d_d">The five foundational pillars of the Christian faith, recovered during the Reformation and held by faithful Bible teachers throughout history.</p></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 relative overflow-hidden group"><div class="sola-num">I</div><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:book-open" data-width="18"></span></div><p class="text-[10px] font-medium text-emerald-400/60 uppercase tracking-widest mb-1">Sola Scriptura</p><h3 class="font-dm text-lg font-medium mb-3" data-t="s1t">Scripture Alone</h3><p class="text-sm text-neutral-400 font-light leading-relaxed mb-4" data-t="s1d">The Bible is the ultimate, infallible authority for faith and practice. As Calvin wrote, Scripture is the "spectacles" through which we see God clearly. No council, tradition, or human teaching can supersede God's Word.</p><p class="text-xs text-emerald-400/60 italic">2 Timothy 3:16-17</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 relative overflow-hidden group"><div class="sola-num">II</div><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:hand-heart" data-width="18"></span></div><p class="text-[10px] font-medium text-emerald-400/60 uppercase tracking-widest mb-1">Sola Fide</p><h3 class="font-dm text-lg font-medium mb-3" data-t="s2t">Faith Alone</h3><p class="text-sm text-neutral-400 font-light leading-relaxed mb-4" data-t="s2d">Justification before God is received by faith alone, not by works. Calvin taught that faith is the instrument by which we receive Christ and all His benefits. Good works are the fruit - never the root - of salvation.</p><p class="text-xs text-emerald-400/60 italic">Romans 3:28</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 relative overflow-hidden group"><div class="sola-num">III</div><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:sparkles" data-width="18"></span></div><p class="text-[10px] font-medium text-emerald-400/60 uppercase tracking-widest mb-1">Sola Gratia</p><h3 class="font-dm text-lg font-medium mb-3" data-t="s3t">Grace Alone</h3><p class="text-sm text-neutral-400 font-light leading-relaxed mb-4" data-t="s3d">Salvation is entirely by God's grace - His unmerited favor toward undeserving sinners. As MacArthur emphasizes, grace is not just God's attitude but His active power to save. No human effort can contribute to salvation.</p><p class="text-xs text-emerald-400/60 italic">Ephesians 2:8-9</p></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 relative overflow-hidden group"><div class="sola-num">IV</div><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:cross" data-width="18"></span></div><p class="text-[10px] font-medium text-emerald-400/60 uppercase tracking-widest mb-1">Solus Christus</p><h3 class="font-dm text-lg font-medium mb-3" data-t="s4t">Christ Alone</h3><p class="text-sm text-neutral-400 font-light leading-relaxed mb-4" data-t="s4d">Jesus Christ is the only mediator between God and man. His life, death, and resurrection are completely sufficient for salvation. As Piper says: "Christ did not make salvation possible - He actually saved." No saint, priest, or ritual can add to His finished work.</p><p class="text-xs text-emerald-400/60 italic">1 Timothy 2:5</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 relative overflow-hidden group"><div class="sola-num">V</div><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:crown" data-width="18"></span></div><p class="text-[10px] font-medium text-emerald-400/60 uppercase tracking-widest mb-1">Soli Deo Gloria</p><h3 class="font-dm text-lg font-medium mb-3" data-t="s5t">Glory to God Alone</h3><p class="text-sm text-neutral-400 font-light leading-relaxed mb-4" data-t="s5d">All of life exists to glorify God. As the Westminster Catechism opens: the chief end of man is to glorify God and enjoy Him forever. Calvin wrote that every aspect of life should be directed toward God's glory.</p><p class="text-xs text-emerald-400/60 italic">1 Corinthians 10:31</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- SCRIPTURE CARDS -->
+<section id="verses" class="relative py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16"><span class="text-emerald-400 text-xs font-medium tracking-wide uppercase" data-t="v_l">God's Word</span><h2 class="font-dm font-light text-3xl md:text-5xl tracking-tight mt-3 mb-4" data-t="v_t">Scriptures for You</h2></div>
+        <div class="flex justify-center items-center" style="min-height:400px;perspective:1000px"><div class="relative w-full max-w-2xl" style="height:360px">
+            <div id="vc3" class="verse-card absolute inset-0 bg-neutral-900/80 border border-white/10 rounded-2xl p-8 flex flex-col justify-between" style="transform:translateY(48px) scale(.95);z-index:1;opacity:.5"><div><div class="flex items-center gap-2 mb-4"><span class="iconify text-emerald-400" data-icon="lucide:shield" data-width="18"></span><span class="text-xs font-medium text-emerald-400 uppercase tracking-wide" data-t="v3t">Peace and Protection</span></div><p class="text-lg font-light text-neutral-300 leading-relaxed italic">"The Lord is my shepherd; I shall not want. He makes me to lie down in green pastures. He leads me beside the still waters. He restores my soul."</p></div><div class="flex items-center justify-between"><span class="text-sm text-neutral-500">Psalm 23:1-3</span><span class="text-xs px-2 py-1 rounded-full bg-white/5 text-neutral-500" data-t="v_ot">Old Testament</span></div></div>
+            <div id="vc2" class="verse-card absolute inset-0 bg-neutral-900/80 border border-white/10 rounded-2xl p-8 flex flex-col justify-between" style="transform:translateY(24px) scale(.975);z-index:2;opacity:.7"><div><div class="flex items-center gap-2 mb-4"><span class="iconify text-emerald-400" data-icon="lucide:flame" data-width="18"></span><span class="text-xs font-medium text-emerald-400 uppercase tracking-wide" data-t="v2t">Strength and Courage</span></div><p class="text-lg font-light text-neutral-300 leading-relaxed italic">"I can do all things through Christ who strengthens me."</p></div><div class="flex items-center justify-between"><span class="text-sm text-neutral-500">Philippians 4:13</span><span class="text-xs px-2 py-1 rounded-full bg-white/5 text-neutral-500" data-t="v_nt">New Testament</span></div></div>
+            <div id="vc1" class="verse-card absolute inset-0 bg-neutral-900/80 border border-emerald-500/20 rounded-2xl p-8 flex flex-col justify-between cursor-pointer" style="transform:translateY(0) scale(1);z-index:3" onmouseenter="ec()" onmouseleave="rc()"><div><div class="flex items-center gap-2 mb-4"><span class="iconify text-emerald-400" data-icon="lucide:heart" data-width="18"></span><span class="text-xs font-medium text-emerald-400 uppercase tracking-wide" data-t="v1t">God's Love</span></div><p class="text-lg font-light text-neutral-300 leading-relaxed italic">"For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life."</p></div><div class="flex items-center justify-between"><span class="text-sm text-neutral-500">John 3:16</span><span class="text-xs px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400" data-t="v_nt2">New Testament</span></div></div>
+        </div></div>
+    </div>
+</section>
+
+<!-- GOSPEL -->
+<section class="relative py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6"><div class="relative bg-neutral-900/50 border border-white/10 rounded-3xl p-8 md:p-16 overflow-hidden"><div class="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events:none"></div><div class="relative z-10 max-w-2xl">
+        <span class="text-emerald-400 text-xs font-medium tracking-wide uppercase" data-t="g_l">The Good News</span>
+        <h2 class="font-dm font-light text-3xl md:text-5xl tracking-tight mt-3 mb-6"><span data-t="g_t1">The Gospel</span><br><span class="hero-title-gradient" data-t="g_t2">In Simple Terms</span></h2>
+        <div class="space-y-6">
+            <div class="flex items-start gap-4"><div class="w-8 h-8 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5"><span class="text-xs font-medium text-red-400">1</span></div><div><h4 class="text-sm font-medium mb-1" data-t="g_s1t">God Loves You</h4><p class="text-sm text-neutral-400 font-light" data-t="g_s1d">God created you and loves you deeply. He has a wonderful plan for your life.</p></div></div>
+            <div class="flex items-start gap-4"><div class="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5"><span class="text-xs font-medium text-amber-400">2</span></div><div><h4 class="text-sm font-medium mb-1" data-t="g_s2t">Sin Separates Us</h4><p class="text-sm text-neutral-400 font-light" data-t="g_s2d">All have sinned and fall short of God's glory. Sin creates a gap between us and God.</p></div></div>
+            <div class="flex items-start gap-4"><div class="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 mt-0.5"><span class="text-xs font-medium text-blue-400">3</span></div><div><h4 class="text-sm font-medium mb-1" data-t="g_s3t">Jesus Bridged the Gap</h4><p class="text-sm text-neutral-400 font-light" data-t="g_s3d">Jesus died on the cross to pay for our sins. He is the only way back to God.</p></div></div>
+            <div class="flex items-start gap-4"><div class="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 mt-0.5"><span class="text-xs font-medium text-emerald-400">4</span></div><div><h4 class="text-sm font-medium mb-1" data-t="g_s4t">Accept Him Today</h4><p class="text-sm text-neutral-400 font-light" data-t="g_s4d">Confess Jesus as Lord, believe in your heart that God raised Him from the dead, and you will be saved.</p></div></div>
+        </div>
+        <div class="mt-8 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10"><p class="text-sm text-emerald-300/80 italic font-light">"That if you confess with your mouth the Lord Jesus and believe in your heart that God has raised Him from the dead, you will be saved." - Romans 10:9</p></div>
+    </div></div></div>
+</section>
+
+<!-- SALVATION PRAYER -->
+<section class="relative py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6"><div class="text-center max-w-2xl mx-auto">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 mb-8"><span class="iconify text-emerald-400" data-icon="lucide:heart-handshake" data-width="28"></span></div>
+        <h2 class="font-dm font-light text-3xl md:text-5xl tracking-tight mb-6" data-t="sp_t">Ready to Accept Jesus?</h2>
+        <p class="text-neutral-400 font-light text-lg mb-8" data-t="sp_d">If you would like to invite Jesus into your heart, pray this prayer from wherever you are:</p>
+        <div class="text-left bg-neutral-900/50 border border-white/10 rounded-2xl p-8 mb-8"><p class="text-sm text-neutral-300 font-light leading-relaxed italic" data-t="sp_tx">"Dear God, I know that I am a sinner and I need Your forgiveness. I believe that Jesus Christ died on the cross for my sins and rose from the dead. I turn from my sins and I invite Jesus to come into my heart and life as my Lord and Savior. I want to follow You and live for You. Thank You for Your love, Your grace, and the gift of eternal life. In Jesus name I pray, Amen."</p></div>
+        <p class="text-sm text-neutral-500 font-light" data-t="sp_f">If you just prayed this prayer, welcome to the family of God! Find a local church, read the Bible, and talk to God daily through prayer.</p>
+    </div></div>
+</section>
+
+<!-- RESOURCES - HARD CODED -->
+<section id="resources" class="relative py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16"><span class="text-emerald-400 text-xs font-medium tracking-wide uppercase" data-t="r_l">Go Deeper</span><h2 class="font-dm font-light text-3xl md:text-5xl tracking-tight mt-3 mb-4" data-t="r_t">Recommended Resources</h2><p class="text-neutral-400 font-light text-lg max-w-2xl mx-auto" data-t="r_d">Trusted books, study Bibles, and ministries to grow your understanding of God's Word.</p></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="flex items-center justify-between mb-5"><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:book-open" data-width="18"></span></div><span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-500 uppercase tracking-wide">Book</span></div><h3 class="font-dm text-base font-medium mb-1">The Gospel According to Jesus</h3><p class="text-xs text-emerald-400/60 mb-3">John MacArthur</p><p class="text-sm text-neutral-400 font-light leading-relaxed">A powerful defense of the true biblical gospel against the watered-down version so common today. MacArthur calls the church back to the Jesus of Scripture.</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="flex items-center justify-between mb-5"><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:book-open" data-width="18"></span></div><span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-500 uppercase tracking-wide">Book</span></div><h3 class="font-dm text-base font-medium mb-1">Desiring God</h3><p class="text-xs text-emerald-400/60 mb-3">John Piper</p><p class="text-sm text-neutral-400 font-light leading-relaxed">Piper's classic work on Christian Hedonism - the revolutionary idea that God is most glorified in us when we are most satisfied in Him.</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="flex items-center justify-between mb-5"><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:book-open" data-width="18"></span></div><span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-500 uppercase tracking-wide">Book</span></div><h3 class="font-dm text-base font-medium mb-1">Institutes of the Christian Religion</h3><p class="text-xs text-emerald-400/60 mb-3">John Calvin</p><p class="text-sm text-neutral-400 font-light leading-relaxed">The foundational work of Reformed theology. Calvin's masterpiece covers the knowledge of God, Christ, salvation by grace, the church, and the Christian life.</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="flex items-center justify-between mb-5"><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:book-marked" data-width="18"></span></div><span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-500 uppercase tracking-wide">Study Bible</span></div><h3 class="font-dm text-base font-medium mb-1">The MacArthur Study Bible</h3><p class="text-xs text-emerald-400/60 mb-3">John MacArthur</p><p class="text-sm text-neutral-400 font-light leading-relaxed">An essential study Bible with verse-by-verse commentary rooted in conservative, expository theology. Nearly 25,000 study notes.</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="flex items-center justify-between mb-5"><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:globe" data-width="18"></span></div><span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-500 uppercase tracking-wide">Ministry</span></div><h3 class="font-dm text-base font-medium mb-1">Grace to You</h3><p class="text-xs text-emerald-400/60 mb-3">gty.org</p><p class="text-sm text-neutral-400 font-light leading-relaxed">MacArthur's ministry with thousands of free sermons, articles, and study resources. One of the most trusted expository preaching ministries in the world.</p></div>
+            <div class="card-hover bg-neutral-900/30 border border-white/10 rounded-2xl p-8 group"><div class="flex items-center justify-between mb-5"><div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform"><span class="iconify text-emerald-400" data-icon="lucide:globe" data-width="18"></span></div><span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-500 uppercase tracking-wide">Ministry</span></div><h3 class="font-dm text-base font-medium mb-1">Desiring God</h3><p class="text-xs text-emerald-400/60 mb-3">desiringGod.org</p><p class="text-sm text-neutral-400 font-light leading-relaxed">Piper's ministry with hundreds of free books, articles, sermons, and podcasts - all centered on the supremacy of God in all things for the joy of all peoples.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/5 py-12">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+            <div class="col-span-2 md:col-span-1"><div class="flex items-center gap-2 mb-4"><div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center"><span class="iconify text-emerald-400" data-icon="lucide:cross" data-width="16"></span></div><span class="font-dm text-lg font-medium tracking-tighter">AskJesus</span></div><p class="text-xs text-neutral-500 font-light" data-t="ft_d">Bringing people closer to Jesus through answers rooted in God's Word.</p></div>
+            <div><h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wide mb-4" data-t="ft_e">Explore</h4><ul class="space-y-2"><li><a href="#ask" class="text-sm text-neutral-500 hover:text-white transition-colors" data-t="nav_ask">Ask a Question</a></li><li><a href="#faq" class="text-sm text-neutral-500 hover:text-white transition-colors" data-t="nav_faq">FAQ</a></li><li><a href="#who-is-jesus" class="text-sm text-neutral-500 hover:text-white transition-colors" data-t="nav_who">Who is Jesus?</a></li></ul></div>
+            <div><h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wide mb-4" data-t="ft_l">Learn</h4><ul class="space-y-2"><li><a href="#doctrines" class="text-sm text-neutral-500 hover:text-white transition-colors" data-t="nav_doc">Core Doctrines</a></li><li><a href="#verses" class="text-sm text-neutral-500 hover:text-white transition-colors">Scriptures</a></li><li><a href="#resources" class="text-sm text-neutral-500 hover:text-white transition-colors" data-t="nav_res">Resources</a></li></ul></div>
+            <div><h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wide mb-4">Scripture</h4><ul class="space-y-2"><li><span class="text-sm text-neutral-500">John 3:16</span></li><li><span class="text-sm text-neutral-500">Romans 10:9</span></li><li><span class="text-sm text-neutral-500">Ephesians 2:8-9</span></li></ul></div>
+        </div>
+        <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"><p class="text-xs text-neutral-600">"For where two or three gather in my name, there am I with them." - Matthew 18:20</p><p class="text-xs text-neutral-600" data-t="ft_m">Made with faith and love</p></div>
+    </div>
+</footer>
+
+<!-- ========== TRANSLATION SYSTEM (JavaScript - works in browser) ========== -->
+<script>
+var CL = 'en';
+
+var T = {
+en:{
+    nav_ask:"Ask a Question",nav_faq:"FAQ",nav_who:"Who is Jesus?",nav_doc:"Core Doctrines",nav_res:"Resources",nav_cta:"Ask Now",
+    hero_badge:"Find answers in faith",hero_t1:"Ask About",hero_t2:"Jesus",hero_desc:"Have questions about faith, Jesus, or the Bible? Find quick answers below, or submit your question for a personal, scripture-based response by email.",hero_cta1:"Browse Answers",hero_cta2:"Ask a Question",
+    stat_bible:"Books of the Bible",stat_years:"Years of Faith",stat_love:"God's Love",
+    ask_label:"Your Questions Matter",ask_title:"Submit Your Question",ask_desc:"For deeper or personal questions, fill out the form and receive a thoughtful, Bible-based answer by email.",
+    f_name:"Your Name",f_opt:"(optional)",f_name_ph:"e.g. John",f_email:"Your Email",f_email_ph:"your.email@example.com",f_q:"Your Question",f_q_ph:"e.g. Who is Jesus? Why did He die on the cross?",f_submit:"Submit Your Question",
+    ok_t:"Question Sent!",ok_d:"Your question has been received. A personal, scripture-based answer will be sent to your email soon.",ok_a:"Ask Another Question",
+    i_hl:"How it works:",i_h:"Submit your question and receive a Bible-based answer by email.",i_pl:"Privacy:",i_p:"Your name and email are kept confidential.",i_tl:"Response time:",i_t:"Within 24-48 hours.",
+    fq_label:"Quick Answers",fq_title:"Frequently Asked Questions",fq_desc:"Find answers rooted in Scripture and informed by faithful biblical theology. Click any question to expand.",
+    q1:"How can I be saved?",q2:"What does it mean that God is sovereign?",q3:"Can I lose my salvation?",q4:"What is the purpose of my life?",q5:"Why did Jesus have to die?",q6:"What is predestination?",q7:"How do I know the Bible is true?",q8:"What does it mean to be born again?",q9:"What is the role of the Holy Spirit?",q10:"How should I read the Bible?",
+    w_l:"The Heart of Faith",w_t:"Who Is Jesus?",w_d:"Jesus Christ is the central figure of Christianity - fully God and fully human, the Son of God who came to save the world.",
+    w1t:"Son of God",w1d:"Jesus is the only begotten Son of God, born of the Virgin Mary. He is the Word made flesh - God who became human to dwell among us.",
+    w2t:"Savior of the World",w2d:"Jesus died on the cross to pay the penalty for our sins. His sacrifice offers forgiveness, redemption, and eternal life to all who believe.",
+    w3t:"Risen Lord",w3d:"On the third day, Jesus rose from the dead, conquering death and sin. His resurrection is the foundation of Christian hope and the promise of new life.",
+    d_l:"Foundational Truths",d_t:"The Five Solas",d_d:"The five foundational pillars of the Christian faith, recovered during the Reformation and held by faithful Bible teachers throughout history.",
+    s1t:"Scripture Alone",s1d:"The Bible is the ultimate, infallible authority for faith and practice. As Calvin wrote, Scripture is the spectacles through which we see God clearly. No council, tradition, or human teaching can supersede God's Word.",
+    s2t:"Faith Alone",s2d:"Justification before God is received by faith alone, not by works. Calvin taught that faith is the instrument by which we receive Christ. Good works are the fruit - never the root - of salvation.",
+    s3t:"Grace Alone",s3d:"Salvation is entirely by God's grace - His unmerited favor toward undeserving sinners. As MacArthur emphasizes, grace is not just God's attitude but His active power to save.",
+    s4t:"Christ Alone",s4d:"Jesus Christ is the only mediator between God and man. His life, death, and resurrection are completely sufficient for salvation. As Piper says: Christ did not make salvation possible - He actually saved.",
+    s5t:"Glory to God Alone",s5d:"All of life exists to glorify God. The chief end of man is to glorify God and enjoy Him forever. Calvin wrote that every aspect of life should be directed toward God's glory.",
+    v_l:"God's Word",v_t:"Scriptures for You",v1t:"God's Love",v2t:"Strength and Courage",v3t:"Peace and Protection",
+    v_ot:"Old Testament",v_nt:"New Testament",v_nt2:"New Testament",
+    g_l:"The Good News",g_t1:"The Gospel",g_t2:"In Simple Terms",
+    g_s1t:"God Loves You",g_s1d:"God created you and loves you deeply. He has a wonderful plan for your life.",
+    g_s2t:"Sin Separates Us",g_s2d:"All have sinned and fall short of God's glory. Sin creates a gap between us and God.",
+    g_s3t:"Jesus Bridged the Gap",g_s3d:"Jesus died on the cross to pay for our sins. He is the only way back to God.",
+    g_s4t:"Accept Him Today",g_s4d:"Confess Jesus as Lord, believe in your heart that God raised Him from the dead, and you will be saved.",
+    sp_t:"Ready to Accept Jesus?",sp_d:"If you would like to invite Jesus into your heart, pray this prayer from wherever you are:",
+    sp_tx:'"Dear God, I know that I am a sinner and I need Your forgiveness. I believe that Jesus Christ died on the cross for my sins and rose from the dead. I turn from my sins and I invite Jesus to come into my heart and life as my Lord and Savior. I want to follow You and live for You. Thank You for Your love, Your grace, and the gift of eternal life. In Jesus name I pray, Amen."',
+    sp_f:"If you just prayed this prayer, welcome to the family of God! Find a local church, read the Bible, and talk to God daily through prayer.",
+    r_l:"Go Deeper",r_t:"Recommended Resources",r_d:"Trusted books, study Bibles, and ministries to grow your understanding of God's Word.",
+    ft_d:"Bringing people closer to Jesus through answers rooted in God's Word.",ft_e:"Explore",ft_l:"Learn",ft_m:"Made with faith and love"
+},
+sq:{
+    nav_ask:"Bëj një Pyetje",nav_faq:"PPSH",nav_who:"Kush Është Jezusi?",nav_doc:"Doktrina Kyçe",nav_res:"Burime",nav_cta:"Pyet Tani",
+    hero_badge:"Gjej përgjigje në besim",hero_t1:"Pyet rreth",hero_t2:"Jezusit",hero_desc:"Ke pyetje rreth besimit, Jezusit ose Biblës? Gjej përgjigje të shpejta më poshtë, ose dërgo pyetjen tënde për një përgjigje personale bazuar në Shkrimet e Shenjta.",hero_cta1:"Shfleto Përgjigjet",hero_cta2:"Bëj një Pyetje",
+    stat_bible:"Libra të Biblës",stat_years:"Vite Besimi",stat_love:"Dashuria e Perëndisë",
+    ask_label:"Pyetjet Tuaja Kanë Rëndësi",ask_title:"Dërgo Pyetjen Tënde",ask_desc:"Për pyetje më të thella ose personale, plotëso formularin dhe merr një përgjigje të menduar, bazuar në Bibël, në email.",
+    f_name:"Emri yt",f_opt:"(opsional)",f_name_ph:"p.sh. Gjon",f_email:"Email-i yt",f_email_ph:"emaili.yt@shembull.com",f_q:"Pyetja yt",f_q_ph:"p.sh. Kush Është Jezusi? Pse vdiq në kryq?",f_submit:"Dërgo Pyetjen Tënde",
+    ok_t:"Pyetja U Dërgua!",ok_d:"Pyetja juaj u pranua. Së shpejti do të merrni një përgjigje personale bazuar në Shkrimet e Shenjta në email-in tuaj.",ok_a:"Bëj një Pyetje Tjetër",
+    i_hl:"Si funksionon:",i_h:"Dërgo pyetjen tënde dhe merr një përgjigje bazuar në Bibël në email.",i_pl:"Privatësia:",i_p:"Emri dhe email-i juaj mbahen konfidencial.",i_tl:"Koha e përgjigjes:",i_t:"Brenda 24-48 orësh.",
+    fq_label:"Përgjigje të Shpejta",fq_title:"Pyetje të Bëra Shpesh",fq_desc:"Gjej përgjigje të rrënjëzuara në Shkrimet e Shenjta. Kliko çdo pyetje për ta hapur.",
+    q1:"Si mund të shpëtohem?",q2:"Çfarë do të thotë se Perëndia është sovran?",q3:"A mund ta humbas shpëtimin?",q4:"Cili është qëllimi i jetës time?",q5:"Pse duhej të vdiste Jezusi?",q6:"Çfarë është paracaktimi?",q7:"Si e di se Bibla është e vërtetë?",q8:"Çfarë do të thotë të lindësh sërish?",q9:"Cili është roli i Shpirtit të Shenjtë?",q10:"Si duhet ta lexoj Biblën?",
+    w_l:"Zemra e Besimit",w_t:"Kush Është Jezusi?",w_d:"Jezu Krishti është figura qendrore e krishterimit - Perëndia i plotë dhe njeri i plotë, Biri i Perëndisë që erdhi për të shpëtuar botën.",
+    w1t:"Biri i Perëndisë",w1d:"Jezusi është Biri i vetëmlindur i Perëndisë, i lindur nga Virgjëresha Maria. Ai është Fjala bërë mish - Perëndia që u bë njeri për të banuar mes nesh.",
+    w2t:"Shpëtimtari i Botës",w2d:"Jezusi vdiq në kryq për të paguar dënimin për mëkatet tona. Flijimi i tij ofron falje, shpengim dhe jetë të përjetshme për të gjithë që besojnë.",
+    w3t:"Zoti i Ngjallur",w3d:"Në ditën e tretë Jezusi u ngjall nga të vdekurit, duke munduar vdekjen dhe mëkatin. Ngjallja e tij është themeli i shpresës kristiane dhe premtimi i jetës së re.",
+    d_l:"Të Vërteta Themelore",d_t:"Pesë Solat",d_d:"Pesë shtyllat themelore të besimit kristian, të rikuperuara gjatë Reformës dhe mbajtura nga mësues besnikë të Biblës gjatë historisë.",
+    s1t:"Vetëm Shkrimet",s1d:"Bibla është autoriteti i fundëm dhe i pavendosur për besim dhe praktikë. Siç shkroi Kalvini, Shkrimi janë syzet përmes të cilave e shohim Perëndinë qartë.",
+    s2t:"Vetëm Besimi",s2d:"Justifikimi para Perëndisë merrset vetëm me besim, jo me vepra. Kalvini mësoi se besimi është mjeti me të cilin ne marrim Krishtin.",
+    s3t:"Vetëm Hiri",s3d:"Shpëtimi është plotësisht nga hiri i Perëndisë - favori i Tij i pandëshkueshëm ndaj mëkatarëve. Siç thekson MakArtur, hiri është fuqia e Tij aktive për të shpëtuar.",
+    s4t:"Vetëm Krishti",s4d:"Jezu Krishti është ndërmjetësi i vetëm midis Perëndisë ndaj njeriut. Jeta, vdekja dhe ngjallja e tij janë plotësisht të mjaftueshme për shpëtim. Asnjë shenjt, prift o ritual nuk mund t'i shtojë veprat e tij të përfunduar.",
+    s5t:"Lavdi Vetëm Perëndisë",s5d:"Gjithçka në jetë ekziston për të lavdëruar Perëndinë. Qëllimi kryesor i njeriut është të lavdërojë Perëndinë dhe të gëzohet prej Tij përjetë.",
+    v_l:"Fjala e Perëndisë",v_t:"Shkrime për Ju",v1t:"Dashuria e Perëndisë",v2t:"Forca dhe Trimëria",v3t:"Paqja dhe Mbrojtja",v_ot:"Testamenti i Vjetër",v_nt:"Testamenti i Ri",v_nt2:"Testamenti i Ri",
+    g_l:"Lajmi i Mirë",g_t1:"Ungjilli",g_t2:"Në Terma të Thjeshtë",
+    g_s1t:"Perëndia Ju Do",g_s1d:"Perëndia ju krijoi dhe ju do thellë. Ai ka një plan të mrekullueshëm për jetën tuaj.",
+    g_s2t:"Mëkati Na Ndan",g_s2d:"Të gjithë kanë mëkatuar dhe nuk arrijnë lavdinë e Perëndisë. Mëkati krijon një hendek midis nesh dhe Perëndisë.",
+    g_s3t:"Jezusi Ndërtoi Urën",g_s3d:"Jezusi vdiq në kryq për të paguar për mëkatet tona. Ai është rruga e vetme për tu kthyer tek Perëndia.",
+    g_s4t:"Pranojeni Sot",g_s4d:"Riftoni Jezusin si Zot, besoni në zemrën tuaj se Perëndia e ngjalli atë nga të vdekurit, dhe do të shpëtoheni.",
+    sp_t:"Gati për ta Pranuar Jezusin?",sp_d:"Nëse dëshironi ta ftoni Jezusin në zemrën tuaj, lutuni këtë lutje nga kudo që jeni:",
+    sp_tx:'"Perëndia i dashur, e di që jam mëkatar dhe kam nevojë për faljen tënde. Besoj se Jezu Krishti vdiq në kryq për mëkatet e mia dhe u ngjall nga të vdekurit. Kthehem nga mëkatet e mia dhe ftoj Jezusin të hyjë në zemrën dhe jetën time si Zot dhe Shpëtimtar im. Dua t\'ju ndjek dhe të jetoj për ju. Faleminderit për dashurinë tuaj, hirin tuaj dhe dhuratën e jetës së përjetshme. Në emrin e Jezusit lutem, Amin."',
+    sp_f:"Nëse sapo lutët këtë lutje, mirë se vini në familjen e Perëndisë! Gjeni një kishë lokale, lexoni Biblën dhe flisni me Perëndinë çdo ditë përmes lutjes.",
+    r_l:"Thellohu",r_t:"Burime të Rekomanduara",r_d:"Libra, Bibla studimi dhe ministri të besueshme për të rritur kuptimin tuaj për Fjalën e Perëndisë.",
+    ft_d:"Duke i sjellë njerëzit më afër Jezusit përmes përgjigjesh të rrënjëzuara në Fjalën e Perëndisë.",ft_e:"Eksploro",ft_l:"Mëso",ft_m:"Bërë me besim dhe dashuri"
+},
+no:{
+    nav_ask:"Still et Spørsmål",nav_faq:"OSS",nav_who:"Hvem er Jesus?",nav_doc:"Kjernedoktriner",nav_res:"Ressurser",nav_cta:"Spør Nå",
+    hero_badge:"Finn svar i troen",hero_t1:"Spør om",hero_t2:"Jesus",hero_desc:"Har du spørsmål om troen, Jesus eller Bibelen? Finn raske svar nedenfor, eller send inn spørsmålet ditt for et personlig, skriftbasert svar på e-post.",hero_cta1:"Se Svar",hero_cta2:"Still et Spørsmål",
+    stat_bible:"Bøker i Bibelen",stat_years:"År med Tro",stat_love:"Guds Kjærlighet",
+    ask_label:"Dine Spørsmål Betyr Noe",ask_title:"Send Inn Ditt Spørsmål",ask_desc:"For dypere eller personlige spørsmål, fyll ut skjemaet og motta et gjennomtenkt, Bibelbasert svar på e-post.",
+    f_name:"Ditt Navn",f_opt:"(valgfritt)",f_name_ph:"f.eks. Ole",f_email:"Din E-post",f_email_ph:"din.epost@eksempel.no",f_q:"Ditt Spørsmål",f_q_ph:"f.eks. Hvem er Jesus? Hvorfor døde han på korset?",f_submit:"Send Inn Ditt Spørsmål",
+    ok_t:"Spørsmål Sendt!",ok_d:"Spørsmålet ditt er mottatt. Et personlig, skriftbasert svar vil bli sendt til din e-post snart.",ok_a:"Still Et Nytt Spørsmål",
+    i_hl:"Slik fungerer det:",i_h:"Send inn spørsmålet ditt og motta et Bibelbasert svar på e-post.",i_pl:"Personvern:",i_p:"Ditt navn og e-post holdes konfidensielt.",i_tl:"Svartid:",i_t:"Innen 24-48 timer.",
+    fq_label:"Raske Svar",fq_title:"Ofte Stilte Spørsmål",fq_desc:"Finn svar forankret i Skriften og informert av troverdig bibelteologi. Klikk på et spørsmål for å utvide.",
+    q1:"Hvordan blir jeg frelst?",q2:"Hva betyr det at Gud er suveren?",q3:"Kan jeg miste frelsen?",q4:"Hva er formålet med livet mitt?",q5:"Hvorfor måtte Jesus dø?",q6:"Hva er forutbestemmelse?",q7:"Hvordan vet jeg at Bibelen er sann?",q8:"Hva betyr det å bli født på nytt?",q9:"Hva er Den Hellige Ånds rolle?",q10:"Hvordan bør jeg lese Bibelen?",
+    w_l:"Troens Hjerte",w_t:"Hvem Er Jesus?",w_d:"Jesus Kristus er sentralfiguren i kristendommen - fullt ut Gud og fullt ut menneske, Guds Sønn som kom for å frelse verden.",
+    w1t:"Guds Sønn",w1d:"Jesus er Guds enebårne Sønn, født av jomfru Maria. Han er Ordet som ble kjød - Gud som ble menneske for å bo iblant oss.",w2t:"Verdens Frelser",w2d:"Jesus døde på korset for å betale straffen for våre synder. Hans offer gir tilgivelse, forløsning og evig liv til alle som tror.",w3t:"Oppstandne Herre",w3d:"På tredje dag stod Jesus opp fra de døde og seiret over død og synd. Hans oppstandelse er grunnlaget for kristent håp.",
+    d_l:"Grunnleggende Sannheter",d_t:"De Fem Sola",d_d:"De fem grunnpilarene i den kristne troen, gjenopprettet under reformasjonen og holdt av trofaste bibellærere gjennom historien.",
+    s1t:"Skriften Alene",s1d:"Bibelen er den ultimate, ufeilbare autoriteten for tro og praksis. Som Calvin skrev, Skriften er brillene hvorigjennom vi ser Gud klart.",s2t:"Tro Alene",s2d:"Rettferdiggjørelse for Gud mottas ved tro alene, ikke ved gjerninger. Calvin lærte at troen er instrumentet hvorigjennom vi mottar Kristus.",s3t:"Nåde Alene",s3d:"Frelse er helt ved Guds nåde - Hans ufortjente gunst mot ufortjente syndere. Som MacArthur understreker, nåde er Hans aktive kraft til å frelse.",s4t:"Kristus Alene",s4d:"Jesus Kristus er den eneste mellommannen mellom Gud og menneske. Hans liv, død og oppstandelse er fullt ut tilstrekkelig for frelse.",s5t:"Gud Alene Æren",s5d:"Alt i livet eksisterer for å ære Gud. Menneskets høyeste formål er å ære Gud og gledes i Ham evig.",
+    v_l:"Guds Ord",v_t:"Skrifter for Deg",v1t:"Guds Kjærlighet",v2t:"Styrke og Mot",v3t:"Fred og Beskyttelse",v_ot:"Gamle Testamentet",v_nt:"Nye Testament",v_nt2:"Nye Testament",
+    g_l:"Det Gode Budskap",g_t1:"Evangeliet",g_t2:"I Enkle Termer",
+    g_s1t:"Gud Elsker Deg",g_s1d:"Gud skapte deg og elsker deg dypt. Han har en vidunderlig plan for livet ditt.",g_s2t:"Synd Skiller Oss",g_s2d:"Alle har syndet og faller kort for Guds herlighet. Synd skaper et gap mellom oss og Gud.",g_s3t:"Jesus Bygget Bro",g_s3d:"Jesus døde på korset for å betale for våre synder. Han er den eneste veien tilbake til Gud.",g_s4t:"Ta Imot Ham I Dag",g_s4d:"Bekjenn Jesus som Herre, tro i hjertet at Gud oppvek ham fra de døde, og du skal bli frelst.",
+    sp_t:"Klar for å Ta Imot Jesus?",sp_d:"Hvis du vil invitere Jesus inn i hjertet ditt, be denne bønnen uansett hvor du er:",
+    sp_tx:'"Kjære Gud, jeg vet at jeg er en synder og jeg trenger Din tilgivelse. Jeg tror at Jesus Kristus døde på korset for mine synder og stod opp fra de døde. Jeg vender meg fra mine synder og inviterer Jesus til å komme inn i hjertet og livet mitt som min Herre og Frelser. Jeg ønsker å følge Deg og leve for Deg. Takk for Din kjærlighet, Din nåde, og gaven om evig liv. I Jesu navn ber jeg, Amen."',
+    sp_f:"Hvis du nettopp ba denne bønnen, velkommen til Guds familie! Finn en lokal menighet, les Bibelen og snakk med Gud daglig gjennom bønn.",
+    r_l:"Dypdykk",r_t:"Anbefalte Ressurser",r_d:"Bøker, studiebibler og tjenester du kan stole på for å vokse i forståelsen av Guds Ord.",
+    ft_d:"Duke i sjekk mennesker nærmere Jesus gjennom svar forankret i Guds Ord.",ft_e:"Utforsk",ft_l:"Lær",ft_m:"Laget med tro og kjærlighet"
+}};
+
+function tog(b){var w=b.parentElement,a=w.querySelector('.faq-body'),c=b.querySelector('.faq-icon'),o=a.classList.contains('open');var all=document.querySelectorAll('.faq-body'),ic=document.querySelectorAll('.faq-icon');for(var i=0;i<all.length;i++){all[i].classList.remove('open');all[i].style.maxHeight='0';ic[i].classList.remove('rot')}if(!o){a.classList.add('open');a.style.maxHeight=a.scrollHeight+40+'px';c.classList.add('rot')}}
+
+function ec(){var a=document.getElementById('vc1'),b=document.getElementById('vc2'),c=document.getElementById('vc3');a.style.transform='translateY(-16px) scale(1.03)';a.style.zIndex='10';a.style.opacity='1';a.style.borderColor='rgba(16,185,129,0.3)';a.style.boxShadow='0 0 30px -5px rgba(16,185,129,0.1)';b.style.transform='translateY(32px) scale(0.95)';b.style.opacity='0.4';c.style.transform='translateY(56px) scale(0.9)';c.style.opacity='0.3'}
+function rc(){var s=[{i:'vc1',t:'translateY(0) scale(1)',z:'3',o:'1'},{i:'vc2',t:'translateY(24px) scale(0.975)',z:'2',o:'0.7'},{i:'vc3',t:'translateY(48px) scale(0.95)',z:'1',o:'0.5'}];for(var j=0;j<s.length;j++){var e=document.getElementById(s[j].i);e.style.transform=s[j].t;e.style.zIndex=s[j].z;e.style.opacity=s[j].o;e.style.borderColor='rgba(255,255,255,0.1)';e.style.boxShadow='none'}}
+document.getElementById('qi').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,300)+'px'});
+document.getElementById('mb').addEventListener('click',function(){document.getElementById('mm').classList.toggle('hidden')});
+var ml=document.querySelectorAll('#mm a');for(var i=0;i<ml.length;i++){ml[i].addEventListener('click',function(){document.getElementById('mm').classList.add('hidden')})}
+document.getElementById('lb').addEventListener('click',function(e){e.stopPropagation();document.getElementById('ld').classList.toggle('active');document.getElementById('ldm').classList.remove('active')});
+document.getElementById('lbm').addEventListener('click',function(e){e.stopPropagation();document.getElementById('ldm').classList.toggle('active');document.getElementById('ld').classList.remove('active')});
+document.addEventListener('click',function(){document.getElementById('ld').classList.remove('active');document.getElementById('ldm').classList.remove('active')});
+document.getElementById('ru').value=window.location.href;
+
+// FIXED JAVASCRIPT BELOW
+document.getElementById('qf').addEventListener('submit',function(e){
+    var q=document.getElementById('qi').value.trim(),em=document.getElementById('ei').value.trim();
+    if(!q||!em){e.preventDefault();return}
+    var sb=document.getElementById('sb');
+    sb.disabled=true;
+    var st=CL==='sq'?'Dërgohet...':'Sending...';
+    sb.innerHTML='<svg class="spinner w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>'+st+'</span>';
+    setTimeout(function(){
+        document.getElementById('qf').style.display='none';
+        document.getElementById('ib').style.display='none';
+        document.getElementById('ok').classList.remove('hidden')
+    },2000)
+});
+
+function rf(){document.getElementById('qf').reset();document.getElementById('qf').style.display='';document.getElementById('ib').style.display='';document.getElementById('ok').classList.add('hidden');document.getElementById('sb').disabled=false;document.getElementById('sb').innerHTML='<span class="iconify" data-icon="lucide:send" data-width="18"></span><span>'+((T[CL]||T['en']).f_submit)+'</span>';document.getElementById('ask').scrollIntoView({behavior:'smooth'})}
+
+// ===================== LANGUAGE SYSTEM =====================
+function setLang(lang){
+    CL=lang;
+    var els=document.querySelectorAll('[data-t]');
+    for(var i=0;i<els.length;i++){var k=els[i].getAttribute('data-t');if(T[lang]&&T[lang][k]){els[i].textContent=T[lang][k]}}
+    var phs=document.querySelectorAll('[data-p]');
+    for(var i=0;i<phs.length;i++){var k=phs[i].getAttribute('data-p');if(T[lang]&&T[lang][k]){phs[i].placeholder=T[lang][k]}}
+    document.getElementById('lf').textContent={'en':'🇬🇧','sq':'🇦🇱','no':'🇳🇴'}[lang];
+    document.getElementById('ll').textContent={'en':'EN','sq':'SQ','no':'NO'}[lang];
+    document.getElementById('lfm').textContent=document.getElementById('lf').textContent;
+    // Checkmarks desktop
+    var cks=document.querySelectorAll('.ck');for(var i=0;i<cks.length;i++){cks[i].classList.toggle('hidden',cks[i].getAttribute('data-l')!==lang)}
+    // Checkmarks mobile
+    var ckms=document.querySelectorAll('.ckm');for(var i=0;i<ckms.length;i++){ckms[i].classList.toggle('hidden',ckms[i].getAttribute('data-l')!==lang)}
+    // Close dropdowns
+    document.getElementById('ld').classList.remove('active');document.getElementById('ldm').classList.remove('active');
+    // Save preference
+    localStorage.setItem('askjesus_lang',lang);
+}
+
+// Init on load
+var saved=localStorage.getItem('askjesus_lang');
+if(saved&&T[saved]){setLang(saved)}
+</script>
+</body>
+</html>
